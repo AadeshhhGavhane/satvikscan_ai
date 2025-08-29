@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatvikScan AI - Food Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .method-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            border-color: #2c5530;
+        }
+
+        .method-card.active {
+            background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
+            color: white;
+            border-color: #2c5530;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(44, 85, 48, 0.3);
+        }
+
+        .method-card.active::before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #10b981;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .method-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .method-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .method-description {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .input-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .input-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2c5530;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(44, 85, 48, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+        }
+
+        .file-input-label:hover {
+            border-color: #2c5530;
+            background: #f0f9ff;
+        }
+
+        .file-input-label.dragover {
+            border-color: #2c5530;
+            background: #f0f9ff;
+            transform: scale(1.02);
+        }
+
+        .file-input-icon {
+            font-size: 32px;
+            color: #718096;
+            margin-right: 12px;
+        }
+
+        .file-input-text {
+            text-align: center;
+        }
+
+        .file-input-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .file-input-subtitle {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(44, 85, 48, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .submit-btn.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        .result {
+            margin-top: 32px;
+            padding: 24px;
+            border-radius: 16px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result.success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            color: #166534;
+            border: 2px solid #bbf7d0;
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: #dc2626;
+            border: 2px solid #fecaca;
+        }
+
+        .result.loading {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #0369a1;
+            border: 2px solid #bae6fd;
+            text-align: center;
+        }
+
+        .drag-drop-hint {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+        }
+
+        .drag-drop-hint.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+            
+            .header {
+                padding: 24px 20px;
+            }
+            
+            .content {
+                padding: 24px 20px;
+            }
+            
+            .input-methods {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .method-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🍽️</div>
+            <h1>SatvikScan AI</h1>
+            <div class="subtitle">Intelligent Food Validation for Dietary Compliance</div>
+        </div>
+        
+        <div class="content">
+            <form id="foodForm">
+                <div class="input-methods">
+                    <div class="method-card active" data-input="file">
+                        <span class="method-icon">📁</span>
+                        <div class="method-title">Upload Image</div>
+                        <div class="method-description">Select an image file from your device</div>
+                    </div>
+                    
+                    <div class="method-card" data-input="url">
+                        <span class="method-icon">🔗</span>
+                        <div class="method-title">Image URL</div>
+                        <div class="method-description">Paste a direct image link</div>
+                    </div>
+                    
+                    <div class="method-card" data-input="base64">
+                        <span class="method-icon">🔢</span>
+                        <div class="method-title">Base64</div>
+                        <div class="method-description">Paste encoded image data</div>
+                    </div>
+                </div>
+                
+                <div class="input-section active" id="fileSection">
+                    <div class="form-group">
+                        <label class="form-label">Upload Food Image</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="image" name="image" accept="image/*" class="file-input">
+                            <label for="image" class="file-input-label" id="fileInputLabel">
+                                <div class="file-input-icon">📸</div>
+                                <div class="file-input-text">
+                                    <div class="file-input-title">Click to select or drag & drop</div>
+                                    <div class="file-input-subtitle">Supports JPEG, PNG, GIF, WebP</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-section" id="urlSection">
+                    <div class="form-group">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" id="imageUrl" name="imageUrl" class="form-input" 
+                               placeholder="https://example.com/food-image.jpg">
+                        <div style="margin-top: 8px; font-size: 14px; color: #718096;">
+                            Example: https://fra.cloud.appwrite.io/v1/storage/buckets/.../files/.../view
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-section" id="base64Section">
+                    <div class="form-group">
+                        <label class="form-label">Base64 Encoded Image</label>
+                        <textarea id="imageBase64" name="imageBase64" class="form-input form-textarea" 
+                                  placeholder="Paste your base64 encoded image here..."></textarea>
+                        <div style="margin-top: 8px; font-size: 14px; color: #718096;">
+                            Supports both raw base64 and data URLs (e.g., data:image/jpeg;base64,/9j/4AAQ...)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Food Name (Optional)</label>
+                    <input type="text" id="foodName" name="foodName" class="form-input" 
+                           placeholder="e.g., Dal Makhani, Paneer Tikka, Classic Potato Chips">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ingredients List (Optional)</label>
+                    <textarea id="ingredients" name="ingredients" class="form-input form-textarea" 
+                              placeholder="Enter ingredients separated by commas..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Analyze Food</span>
+                </button>
+            </form>
+            
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <div class="drag-drop-hint" id="dragDropHint">Drop your image here!</div>
+
+    <script>
+        // Method selection
+        document.querySelectorAll('.method-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active class from all cards and sections
+                document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.input-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked card and corresponding section
+                card.classList.add('active');
+                const inputType = card.dataset.input;
+                document.getElementById(inputType + 'Section').classList.add('active');
+                
+                // Clear other inputs
+                if (inputType === 'file') {
+                    document.getElementById('imageUrl').value = '';
+                    document.getElementById('imageBase64').value = '';
+                } else if (inputType === 'url') {
+                    document.getElementById('image').value = '';
+                    document.getElementById('imageBase64').value = '';
+                } else if (inputType === 'base64') {
+                    document.getElementById('image').value = '';
+                    document.getElementById('imageUrl').value = '';
+                }
+            });
+        });
+
+        // Drag and drop functionality
+        const fileInputLabel = document.getElementById('fileInputLabel');
+        const dragDropHint = document.getElementById('dragDropHint');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, unhighlight, false);
+        });
+
+        fileInputLabel.addEventListener('drop', handleDrop, false);
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            fileInputLabel.classList.add('dragover');
+            dragDropHint.classList.add('show');
+        }
+
+        function unhighlight(e) {
+            fileInputLabel.classList.remove('dragover');
+            dragDropHint.classList.remove('show');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                const fileInput = document.getElementById('image');
+                fileInput.files = files;
+                
+                // Update the label to show selected file
+                const fileName = files[0].name;
+                fileInputLabel.innerHTML = `
+                    <div class="file-input-icon">✅</div>
+                    <div class="file-input-text">
+                        <div class="file-input-title">${fileName}</div>
+                        <div class="file-input-subtitle">File selected successfully</div>
+                    </div>
+                `;
+            }
+        }
+
+        // File input change handler
+        document.getElementById('image').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileInputLabel.innerHTML = `
+                    <div class="file-input-icon">✅</div>
+                    <div class="file-input-text">
+                        <div class="file-input-title">${file.name}</div>
+                        <div class="file-input-subtitle">File selected successfully</div>
+                    </div>
+                `;
+            }
+        });
+
+        // Form submission
+        document.getElementById('foodForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            
+            // Show loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = '🤖 Analyzing your food image with AI...\n\nThis may take a few moments.';
+            
+            try {
+                const formData = new FormData();
+                const imageFile = document.getElementById('image').files[0];
+                const imageUrl = document.getElementById('imageUrl').value.trim();
+                const imageBase64 = document.getElementById('imageBase64').value.trim();
+                const foodName = document.getElementById('foodName').value;
+                const ingredients = document.getElementById('ingredients').value;
+                
+                // Add image data based on active input type
+                const activeInput = document.querySelector('.method-card.active').dataset.input;
+                if (activeInput === 'file' && imageFile) {
+                    formData.append('image', imageFile);
+                } else if (activeInput === 'url' && imageUrl) {
+                    formData.append('imageUrl', imageUrl);
+                } else if (activeInput === 'base64' && imageBase64) {
+                    formData.append('imageBase64', imageBase64);
+                } else {
+                    throw new Error(`Please provide a ${activeInput === 'file' ? 'file' : activeInput === 'url' ? 'URL' : 'Base64 encoded image'}`);
+                }
+                
+                if (foodName) formData.append('foodName', foodName);
+                if (ingredients) formData.append('ingredients', ingredients);
+                
+                const response = await fetch('/validate-food', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `Error: ${data.error}\n\nDetails: ${data.details || 'No additional details'}`;
+                }
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `Error: ${error.message}`;
+            } finally {
+                // Reset button state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html> 
