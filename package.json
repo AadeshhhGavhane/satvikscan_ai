@@ -1,14 +1,23 @@
 {
   "name": "satvikscan_ai",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "dev:worker": "bun run --hot src/queue/worker.ts",
+    "start": "bun run src/index.ts",
+    "start:worker": "bun run src/queue/worker.ts",
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "build:worker": "bun build src/queue/worker.ts --outdir dist --target node"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.11",
     "ai": "^5.0.28",
-    "hono": "^4.9.5"
+    "hono": "^4.9.5",
+    "bull": "^4.12.0",
+    "ioredis": "^5.3.2"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/bull": "^4.10.0",
+    "@types/ioredis": "^5.0.0"
   }
 }

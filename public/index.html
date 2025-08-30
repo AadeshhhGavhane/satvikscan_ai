@@ -15,25 +15,40 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 20px;
             color: #2d3748;
+            overflow: hidden; /* Prevent scrolling */
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .left-panel {
+            flex: 0 0 45%;
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
         .header {
             background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
             color: white;
-            padding: 40px;
+            padding: 24px 32px;
             text-align: center;
             position: relative;
+            flex-shrink: 0;
         }
 
         .header::before {
@@ -48,22 +63,22 @@
         }
 
         .logo {
-            font-size: 48px;
-            margin-bottom: 16px;
+            font-size: 36px;
+            margin-bottom: 12px;
             position: relative;
             z-index: 1;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             position: relative;
             z-index: 1;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
             font-weight: 400;
             position: relative;
@@ -71,21 +86,25 @@
         }
 
         .content {
-            padding: 40px;
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .input-methods {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 32px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .method-card {
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -94,8 +113,8 @@
         }
 
         .method-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             border-color: #2c5530;
         }
 
@@ -103,43 +122,43 @@
             background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
             color: white;
             border-color: #2c5530;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(44, 85, 48, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(44, 85, 48, 0.3);
         }
 
         .method-card.active::before {
             content: '✓';
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 8px;
+            right: 8px;
             background: #10b981;
             color: white;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
         }
 
         .method-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
+            font-size: 24px;
+            margin-bottom: 8px;
             display: block;
         }
 
         .method-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .method-description {
-            font-size: 14px;
+            font-size: 12px;
             opacity: 0.8;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .input-section {
@@ -157,23 +176,23 @@
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #2d3748;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .form-input {
             width: 100%;
-            padding: 16px;
+            padding: 12px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
             transition: all 0.3s ease;
             background: #f8fafc;
         }
@@ -186,7 +205,7 @@
         }
 
         .form-textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
             font-family: inherit;
         }
@@ -209,13 +228,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
             border: 2px dashed #cbd5e0;
-            border-radius: 12px;
+            border-radius: 8px;
             background: #f8fafc;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-height: 120px;
+            min-height: 100px;
         }
 
         .file-input-label:hover {
@@ -230,9 +249,9 @@
         }
 
         .file-input-icon {
-            font-size: 32px;
+            font-size: 24px;
             color: #718096;
-            margin-right: 12px;
+            margin-right: 8px;
         }
 
         .file-input-text {
@@ -241,11 +260,12 @@
 
         .file-input-title {
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
+            font-size: 14px;
         }
 
         .file-input-subtitle {
-            font-size: 14px;
+            font-size: 12px;
             color: #718096;
         }
 
@@ -254,19 +274,20 @@
             background: linear-gradient(135deg, #2c5530 0%, #1e3a22 100%);
             color: white;
             border: none;
-            padding: 20px;
-            border-radius: 16px;
-            font-size: 18px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-top: auto;
         }
 
         .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(44, 85, 48, 0.3);
+            box-shadow: 0 8px 24px rgba(44, 85, 48, 0.3);
         }
 
         .submit-btn:active {
@@ -281,8 +302,8 @@
 
         .submit-btn .loading-spinner {
             display: none;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-top: 2px solid white;
             border-radius: 50%;
@@ -299,14 +320,37 @@
             display: inline-block;
         }
 
+        /* Right Panel Styles */
+        .right-panel .header {
+            background: #f1f5f9;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .right-panel .logo {
+            color: #2c5530;
+        }
+
+        .right-panel h1 {
+            color: #2c5530;
+        }
+
+        .right-panel .subtitle {
+            color: #64748b;
+        }
+
+        .result-container {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
         .result {
-            margin-top: 32px;
-            padding: 24px;
+            background: white;
             border-radius: 16px;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
             display: none;
             animation: slideUp 0.4s ease-out;
         }
@@ -317,22 +361,89 @@
         }
 
         .result.success {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            color: #166534;
-            border: 2px solid #bbf7d0;
+            border-left: 4px solid #10b981;
         }
 
         .result.error {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            color: #dc2626;
-            border: 2px solid #fecaca;
+            border-left: 4px solid #ef4444;
         }
 
         .result.loading {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            color: #0369a1;
-            border: 2px solid #bae6fd;
+            border-left: 4px solid #3b82f6;
             text-align: center;
+        }
+
+        .result h3 {
+            color: #2c5530;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .task-info {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .task-info strong {
+            color: #2d3748;
+        }
+
+        .compliance-results {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .compliance-item {
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0f2fe;
+        }
+
+        .compliance-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .compliance-item strong {
+            color: #1e40af;
+            margin-right: 8px;
+        }
+
+        .status-yes {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .reasons-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0f2fe;
+        }
+
+        .reasons-section strong {
+            color: #1e40af;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .reason-item {
+            margin-left: 16px;
+            margin-bottom: 4px;
+            color: #374151;
         }
 
         .drag-drop-hint {
@@ -342,9 +453,9 @@
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 20px 40px;
-            border-radius: 12px;
-            font-size: 18px;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 600;
             z-index: 1000;
             display: none;
@@ -355,118 +466,172 @@
             animation: fadeIn 0.3s ease-in-out;
         }
 
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
+        .empty-state-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1200px) {
+            .left-panel {
+                flex: 0 0 50%;
+            }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 16px;
+            .app-container {
+                flex-direction: column;
             }
             
-            .header {
-                padding: 24px 20px;
-            }
-            
-            .content {
-                padding: 24px 20px;
+            .left-panel, .right-panel {
+                flex: none;
+                height: 50vh;
             }
             
             .input-methods {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 8px;
             }
             
             .method-card {
+                padding: 12px;
+            }
+            
+            .content {
                 padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🍽️</div>
-            <h1>SatvikScan AI</h1>
-            <div class="subtitle">Intelligent Food Validation for Dietary Compliance</div>
-        </div>
-        
-        <div class="content">
-            <form id="foodForm">
-                <div class="input-methods">
-                    <div class="method-card active" data-input="file">
-                        <span class="method-icon">📁</span>
-                        <div class="method-title">Upload Image</div>
-                        <div class="method-description">Select an image file from your device</div>
-                    </div>
-                    
-                    <div class="method-card" data-input="url">
-                        <span class="method-icon">🔗</span>
-                        <div class="method-title">Image URL</div>
-                        <div class="method-description">Paste a direct image link</div>
-                    </div>
-                    
-                    <div class="method-card" data-input="base64">
-                        <span class="method-icon">🔢</span>
-                        <div class="method-title">Base64</div>
-                        <div class="method-description">Paste encoded image data</div>
-                    </div>
-                </div>
-                
-                <div class="input-section active" id="fileSection">
-                    <div class="form-group">
-                        <label class="form-label">Upload Food Image</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="image" name="image" accept="image/*" class="file-input">
-                            <label for="image" class="file-input-label" id="fileInputLabel">
-                                <div class="file-input-icon">📸</div>
-                                <div class="file-input-text">
-                                    <div class="file-input-title">Click to select or drag & drop</div>
-                                    <div class="file-input-subtitle">Supports JPEG, PNG, GIF, WebP</div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-section" id="urlSection">
-                    <div class="form-group">
-                        <label class="form-label">Image URL</label>
-                        <input type="text" id="imageUrl" name="imageUrl" class="form-input" 
-                               placeholder="https://example.com/food-image.jpg">
-                        <div style="margin-top: 8px; font-size: 14px; color: #718096;">
-                            Example: https://fra.cloud.appwrite.io/v1/storage/buckets/.../files/.../view
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="input-section" id="base64Section">
-                    <div class="form-group">
-                        <label class="form-label">Base64 Encoded Image</label>
-                        <textarea id="imageBase64" name="imageBase64" class="form-input form-textarea" 
-                                  placeholder="Paste your base64 encoded image here..."></textarea>
-                        <div style="margin-top: 8px; font-size: 14px; color: #718096;">
-                            Supports both raw base64 and data URLs (e.g., data:image/jpeg;base64,/9j/4AAQ...)
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Food Name (Optional)</label>
-                    <input type="text" id="foodName" name="foodName" class="form-input" 
-                           placeholder="e.g., Dal Makhani, Paneer Tikka, Classic Potato Chips">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Ingredients List (Optional)</label>
-                    <textarea id="ingredients" name="ingredients" class="form-input form-textarea" 
-                              placeholder="Enter ingredients separated by commas..."></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span class="loading-spinner"></span>
-                    <span class="btn-text">Analyze Food</span>
-                </button>
-            </form>
+    <div class="app-container">
+        <!-- Left Panel - Input Form -->
+        <div class="left-panel">
+            <div class="header">
+                <div class="logo">🍽️</div>
+                <h1>SatvikScan AI</h1>
+                <div class="subtitle">Intelligent Food Validation for Dietary Compliance</div>
+            </div>
             
-            <div id="result" class="result"></div>
+            <div class="content">
+                <form id="foodForm">
+                    <div class="input-methods">
+                        <div class="method-card active" data-input="file">
+                            <span class="method-icon">📁</span>
+                            <div class="method-title">Upload Image</div>
+                            <div class="method-description">Select an image file from your device</div>
+                        </div>
+                        
+                        <div class="method-card" data-input="url">
+                            <span class="method-icon">🔗</span>
+                            <div class="method-title">Image URL</div>
+                            <div class="method-description">Paste a direct image link</div>
+                        </div>
+                        
+                        <div class="method-card" data-input="base64">
+                            <span class="method-icon">🔢</span>
+                            <div class="method-title">Base64</div>
+                            <div class="method-description">Paste encoded image data</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section active" id="fileSection">
+                        <div class="form-group">
+                            <label class="form-label">Upload Food Image</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="image" name="image" accept="image/*" class="file-input">
+                                <label for="image" class="file-input-label" id="fileInputLabel">
+                                    <div class="file-input-icon">📸</div>
+                                    <div class="file-input-text">
+                                        <div class="file-input-title">Click to select or drag & drop</div>
+                                        <div class="file-input-subtitle">Supports JPEG, PNG, GIF, WebP</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section" id="urlSection">
+                        <div class="form-group">
+                            <label class="form-label">Image URL</label>
+                            <input type="text" id="imageUrl" name="imageUrl" class="form-input" 
+                                   placeholder="https://example.com/food-image.jpg">
+                            <div style="margin-top: 6px; font-size: 12px; color: #718096;">
+                                Example: https://fra.cloud.appwrite.io/v1/storage/buckets/.../files/.../view
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section" id="base64Section">
+                        <div class="form-group">
+                            <label class="form-label">Base64 Encoded Image</label>
+                            <textarea id="imageBase64" name="imageBase64" class="form-input form-textarea" 
+                                      placeholder="Paste your base64 encoded image here..."></textarea>
+                            <div style="margin-top: 6px; font-size: 12px; color: #718096;">
+                                Supports both raw base64 and data URLs (e.g., data:image/jpeg;base64,/9j/4AAQ...)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Food Name (Optional)</label>
+                        <input type="text" id="foodName" name="foodName" class="form-input" 
+                               placeholder="e.g., Dal Makhani, Paneer Tikka, Classic Potato Chips">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Ingredients List (Optional)</label>
+                        <textarea id="ingredients" name="ingredients" class="form-input form-textarea" 
+                                  placeholder="Enter ingredients separated by commas..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Analyze Food</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Panel - Results -->
+        <div class="right-panel">
+            <div class="header">
+                <div class="logo">📊</div>
+                <h1>Analysis Results</h1>
+                <div class="subtitle">View your food validation results here</div>
+            </div>
+            
+            <div class="result-container">
+                <div id="result" class="result">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-title">Ready to Analyze</div>
+                        <div class="empty-state-subtitle">Upload a food image to get started with dietary compliance analysis</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -575,11 +740,17 @@
             const resultDiv = document.getElementById('result');
             
             // Show loading state
-            submitBtn.classList.add('loading');
             submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
             resultDiv.style.display = 'block';
             resultDiv.className = 'result loading';
-            resultDiv.textContent = '🤖 Analyzing your food image with AI...\n\nThis may take a few moments.';
+            resultDiv.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🤖</div>
+                    <div class="empty-state-title">Processing Your Request</div>
+                    <div class="empty-state-subtitle">Queuing your food validation task...</div>
+                </div>
+            `;
             
             try {
                 const formData = new FormData();
@@ -604,6 +775,7 @@
                 if (foodName) formData.append('foodName', foodName);
                 if (ingredients) formData.append('ingredients', ingredients);
                 
+                console.log('🚀 Submitting food validation task...');
                 const response = await fetch('/validate-food', {
                     method: 'POST',
                     body: formData
@@ -611,23 +783,196 @@
                 
                 const data = await response.json();
                 
-                if (response.ok) {
-                    resultDiv.className = 'result success';
-                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                if (response.ok && data.success) {
+                    console.log('✅ Task queued successfully:', data);
+                    
+                    // Start polling for task status
+                    const taskId = data.taskId;
+                    resultDiv.className = 'result loading';
+                    resultDiv.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔄</div>
+                            <div class="empty-state-title">Task Queued Successfully!</div>
+                            <div class="empty-state-subtitle">Task ID: ${taskId}<br>Processing your food image... This may take 10-30 seconds.</div>
+                        </div>
+                    `;
+                    
+                    // Poll for status every 5 seconds
+                    pollTaskStatus(taskId, resultDiv, submitBtn);
+                    
                 } else {
-                    resultDiv.className = 'result error';
-                    resultDiv.textContent = `Error: ${data.error}\n\nDetails: ${data.details || 'No additional details'}`;
+                    throw new Error(data.error || 'Failed to queue task');
                 }
                 
             } catch (error) {
+                console.error('❌ Error:', error);
                 resultDiv.className = 'result error';
-                resultDiv.textContent = `Error: ${error.message}`;
-            } finally {
-                // Reset button state
+                resultDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <div class="empty-state-title">Error</div>
+                        <div class="empty-state-subtitle">${error.message}</div>
+                    </div>
+                `;
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
             }
         });
+
+        // Function to poll task status
+        async function pollTaskStatus(taskId, resultDiv, submitBtn) {
+            const maxAttempts = 60; // 5 minutes max (60 * 5 seconds)
+            let attempts = 0;
+            
+            const pollInterval = setInterval(async () => {
+                attempts++;
+                console.log(`🔍 Polling task ${taskId} (attempt ${attempts})...`);
+                
+                try {
+                    const statusResponse = await fetch(`/task-status/${taskId}`);
+                    const statusData = await statusResponse.json();
+                    
+                    if (statusResponse.ok && statusData.success) {
+                        console.log(`📊 Task ${taskId} status:`, statusData.status);
+                        
+                        if (statusData.status === 'completed') {
+                            // Task completed successfully
+                            clearInterval(pollInterval);
+                            console.log('🎉 Task completed! Result:', statusData.result);
+                            
+                            resultDiv.className = 'result success';
+                            resultDiv.innerHTML = `
+                                <h3>🍽️ Food Validation Results</h3>
+                                <div class="task-info">
+                                    <strong>Task ID:</strong> ${taskId}<br>
+                                    <strong>Processing Time:</strong> ${statusData.processingTime}ms<br>
+                                    <strong>Completed:</strong> ${new Date(statusData.completedAt).toLocaleString()}
+                                </div>
+                                <div class="compliance-results">
+                                    <div class="compliance-item">
+                                        <strong>Food Item:</strong> ${statusData.result.food_item}
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Ingredients:</strong> ${statusData.result.ingredients.join(', ')}
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Vegetarian:</strong> 
+                                        <span class="${statusData.result.is_veg === 'yes' ? 'status-yes' : 'status-no'}">
+                                            ${statusData.result.is_veg === 'yes' ? '✅ Yes' : '❌ No'}
+                                        </span>
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Swaminarayan Compliant:</strong> 
+                                        <span class="${statusData.result.is_swaminarayan_compliant === 'yes' ? 'status-yes' : 'status-no'}">
+                                            ${statusData.result.is_swaminarayan_compliant === 'yes' ? '✅ Yes' : '❌ No'}
+                                        </span>
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Jain Compliant:</strong> 
+                                        <span class="${statusData.result.is_jain_compliant === 'yes' ? 'status-yes' : 'status-no'}">
+                                            ${statusData.result.is_jain_compliant === 'yes' ? '✅ Yes' : '❌ No'}
+                                        </span>
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Vegan Compliant:</strong> 
+                                        <span class="${statusData.result.is_vegan_compliant === 'yes' ? 'status-yes' : 'status-no'}">
+                                            ${statusData.result.is_vegan_compliant === 'yes' ? '✅ Yes' : '❌ No'}
+                                        </span>
+                                    </div>
+                                    <div class="compliance-item">
+                                        <strong>Upvas Compliant:</strong> 
+                                        <span class="${statusData.result.is_upvas_compliant === 'yes' ? 'status-yes' : 'status-no'}">
+                                            ${statusData.result.is_upvas_compliant === 'yes' ? '✅ Yes' : '❌ No'}
+                                        </span>
+                                    </div>
+                                    <div class="reasons-section">
+                                        <strong>Reason:</strong>
+                                        ${statusData.result.reason.map(reason => `<div class="reason-item">• ${reason}</div>`).join('')}
+                                    </div>
+                                </div>
+                            `;
+                            
+                            submitBtn.classList.remove('loading');
+                            submitBtn.disabled = false;
+                            
+                        } else if (statusData.status === 'failed') {
+                            // Task failed
+                            clearInterval(pollInterval);
+                            console.error('💥 Task failed:', statusData.error);
+                            
+                            resultDiv.className = 'result error';
+                            resultDiv.innerHTML = `
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">💥</div>
+                                    <div class="empty-state-title">Task Failed</div>
+                                    <div class="empty-state-subtitle">Task ${taskId} failed:<br>${statusData.error}</div>
+                                </div>
+                            `;
+                            
+                            submitBtn.classList.remove('loading');
+                            submitBtn.disabled = false;
+                            
+                        } else if (statusData.status === 'active') {
+                            // Task is being processed
+                            resultDiv.innerHTML = `
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">🔄</div>
+                                    <div class="empty-state-title">Processing</div>
+                                    <div class="empty-state-subtitle">Task ${taskId} is being processed...<br>Estimated completion: 5-15 seconds</div>
+                                </div>
+                            `;
+                            
+                        } else if (statusData.status === 'waiting') {
+                            // Task is waiting in queue
+                            const position = statusData.queuePosition || 'Unknown';
+                            const waitTime = statusData.estimatedWaitTime || 'Unknown';
+                            resultDiv.innerHTML = `
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">⏳</div>
+                                    <div class="empty-state-title">Waiting in Queue</div>
+                                    <div class="empty-state-subtitle">Task ${taskId} is waiting...<br>Position: ${position}<br>Estimated wait: ${waitTime}</div>
+                                </div>
+                            `;
+                            
+                        } else {
+                            // Other status (delayed, etc.)
+                            resultDiv.innerHTML = `
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">📋</div>
+                                    <div class="empty-state-title">Status: ${statusData.status}</div>
+                                    <div class="empty-state-subtitle">Processing...</div>
+                                </div>
+                            `;
+                        }
+                        
+                    } else {
+                        throw new Error(statusData.error || 'Failed to get task status');
+                    }
+                    
+                } catch (error) {
+                    console.error(`❌ Error polling task ${taskId}:`, error);
+                    
+                    if (attempts >= maxAttempts) {
+                        clearInterval(pollInterval);
+                        resultDiv.className = 'result error';
+                        resultDiv.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">⏰</div>
+                                <div class="empty-state-title">Polling Timeout</div>
+                                <div class="empty-state-subtitle">Task ${taskId} polling timeout after 5 minutes.<br>Please check manually at: /task-status/${taskId}</div>
+                            </div>
+                        `;
+                        
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                    }
+                }
+                
+            }, 5000); // Poll every 5 seconds
+            
+            // Store the interval ID so we can clear it if needed
+            resultDiv.dataset.pollInterval = pollInterval;
+        }
     </script>
 </body>
 </html> 
