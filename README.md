@@ -10,6 +10,7 @@ An intelligent food validation API that uses Google's Gemini 2.5 Pro model to an
 - **Asynchronous Processing**: Queue-based architecture for scalable image processing
 - **Real-time Updates**: Frontend polling for task status and results
 - **Modern UI/UX**: Responsive web interface with drag-and-drop functionality
+- **Docker Support**: Complete containerization with Docker Compose
 
 ## 🏗️ Architecture
 
@@ -18,14 +19,91 @@ An intelligent food validation API that uses Google's Gemini 2.5 Pro model to an
 - **Task Queue**: Redis + Bull Queue for background processing
 - **Runtime**: Bun (fast JavaScript runtime)
 - **Frontend**: Vanilla HTML/CSS/JavaScript with modern design
+- **Containerization**: Docker with multi-stage builds
 
 ## 📋 Prerequisites
 
+### For Docker Deployment (Recommended)
+- **Docker** and **Docker Compose** installed
+- **Google Gemini API Key** from [Google AI Studio](https://makersuite.google.com/app/apikey)
+
+### For Local Development
 - **Bun** installed on your system
 - **Docker** for running Redis
 - **Google Gemini API Key** from [Google AI Studio](https://makersuite.google.com/app/apikey)
 
-## 🛠️ Installation & Setup
+## 🐳 Docker Deployment (Recommended)
+
+### 1. Clone and Setup
+
+```bash
+git clone https://github.com/AadeshhhGavhane/satvikscan_ai
+cd satvikscan_ai
+```
+
+### 2. Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```bash
+# Google Gemini API Key (Required)
+GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
+
+# Redis Configuration (Optional - defaults shown)
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+
+# Queue Configuration (Optional - defaults shown)
+QUEUE_CONCURRENCY=5
+```
+
+### 3. Start All Services
+
+```bash
+# Start all services (API, Worker, Redis)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f api
+docker-compose logs -f worker
+docker-compose logs -f redis
+```
+
+### 4. Access the Application
+
+- **Web Interface**: http://localhost:3000
+- **API Health Check**: http://localhost:3000/health
+- **Queue Status**: http://localhost:3000/queue-status
+
+### 5. Docker Management Commands
+
+```bash
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (WARNING: This will delete Redis data)
+docker-compose down -v
+
+# Restart specific service
+docker-compose restart api
+
+# Scale worker instances
+docker-compose up -d --scale worker=3
+
+# View service status
+docker-compose ps
+
+# Execute commands in running container
+docker-compose exec api sh
+docker-compose exec worker sh
+```
+
+## 🛠️ Local Development Setup
 
 ### 1. Clone and Install Dependencies
 
@@ -183,7 +261,7 @@ GET /health
 ## 🔧 Configuration Options
 
 ### Redis Settings
-- **Host**: Redis server hostname (default: localhost)
+- **Host**: Redis server hostname (default: localhost for local, redis for Docker)
 - **Port**: Redis server port (default: 6379)
 - **Password**: Redis authentication password (optional)
 - **Database**: Redis database number (default: 0)
@@ -193,6 +271,12 @@ GET /health
 - **Timeout**: Maximum job processing time (default: 30 minutes)
 - **Retries**: Number of retry attempts for failed jobs (default: 3)
 - **Backoff**: Exponential backoff strategy for retries
+
+### Docker Settings
+- **Memory Limits**: API (512M), Worker (1G), Redis (unlimited)
+- **CPU Limits**: API (0.5 cores), Worker (1.0 cores), Redis (unlimited)
+- **Health Checks**: All services have health checks enabled
+- **Logging**: Centralized logging in `./logs/` directory
 
 ## 📊 Monitoring & Observability
 
@@ -213,11 +297,29 @@ Monitor system health including:
 - API key availability
 - System prompt loading
 - HTML content availability
+- Redis connectivity
+
+### Docker Monitoring
+```bash
+# View all service logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f api
+docker-compose logs -f worker
+docker-compose logs -f redis
+
+# Check service health
+docker-compose ps
+
+# View resource usage
+docker stats
+```
 
 ## 🚀 Scaling Considerations
 
 ### Horizontal Scaling
-- Run multiple worker instances
+- Run multiple worker instances: `docker-compose up -d --scale worker=3`
 - Use Redis cluster for high availability
 - Load balance API requests
 
@@ -225,37 +327,83 @@ Monitor system health including:
 - Adjust queue concurrency based on CPU cores
 - Optimize Redis memory settings
 - Monitor and tune timeout values
+- Scale worker containers based on queue load
 
 ## 🔒 Security Features
 
-- Environment variable configuration
-- Input validation and sanitization
-- Rate limiting (can be added)
-- CORS configuration (can be added)
+- **Non-root containers**: All services run as non-root users
+- **Environment variable configuration**: Sensitive data via environment variables
+- **Input validation and sanitization**: Comprehensive input validation
+- **Resource limits**: Prevent resource exhaustion attacks
+- **Health checks**: Automatic service recovery
+- **Network isolation**: Services communicate via private Docker network
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
+**Docker Issues:**
+```bash
+# Check if all services are running
+docker-compose ps
+
+# View service logs
+docker-compose logs -f [service-name]
+
+# Restart specific service
+docker-compose restart [service-name]
+
+# Rebuild and restart
+docker-compose up -d --build
+```
+
 **Worker not processing jobs:**
-- Check Redis connection
-- Verify worker is running
-- Check job queue status
+- Check Redis connection: `docker-compose exec redis redis-cli ping`
+- Verify worker is running: `docker-compose logs worker`
+- Check job queue status: `curl http://localhost:3000/queue-status`
 
 **Image analysis failing:**
-- Verify Google API key
-- Check image format support
-- Review system prompt
+- Verify Google API key is set in `.env`
+- Check API logs: `docker-compose logs api`
+- Review worker logs: `docker-compose logs worker`
 
 **Queue jobs stuck:**
-- Check Redis memory usage
-- Verify worker processes
+- Check Redis memory usage: `docker-compose exec redis redis-cli info memory`
+- Verify worker processes: `docker-compose logs worker`
 - Review job timeout settings
 
 ### Debug Mode
-Enable detailed logging by setting:
+Enable detailed logging by setting in `.env`:
 ```bash
 NODE_ENV=development
+```
+
+## 📁 Project Structure
+
+```
+satvikscan_ai/
+├── src/
+│   ├── index.ts              # Main API server
+│   └── queue/
+│       ├── config.ts         # Redis and queue configuration
+│       ├── processor.ts      # Background job processor
+│       └── worker.ts         # Worker entry point
+├── public/
+│   └── index.html            # Web interface
+├── logs/                     # Log files (created by Docker)
+│   ├── api/                  # API server logs
+│   ├── worker/               # Worker logs
+│   └── redis/                # Redis logs
+├── Dockerfile                # Multi-stage Docker build
+├── docker-compose.yml        # Service orchestration
+├── .dockerignore             # Docker build context exclusions
+├── systemprompt.md           # AI system prompt
+├── package.json              # Dependencies and scripts
+├── tsconfig.json             # TypeScript configuration
+├── .env                      # Environment variables
+├── .gitignore                # Git exclusions
+├── LICENSE                   # MIT License
+└── README.md                 # This file
 ```
 
 ## 📝 License
@@ -311,4 +459,4 @@ We welcome contributions to SatvikScan AI! Here's how you can help:
 
 ---
 
-**Built with ❤️ using Hono.js, Google Gemini AI, and modern web technologies**
+**Built with ❤️ using Hono.js, Google Gemini AI, Docker, and modern web technologies**
