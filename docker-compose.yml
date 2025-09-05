@@ -1,17 +1,12 @@
 version: '3.8'
 
 services:
-  # Redis service for task queue
   redis:
     image: redis:7-alpine
-    container_name: satvikscan-redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
-      - ./logs/redis:/var/log/redis
-    command: redis-server --appendonly yes --logfile /var/log/redis/redis.log
+    command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -21,12 +16,10 @@ services:
     networks:
       - satvikscan-network
 
-  # API Server
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: satvikscan-api
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -51,21 +44,11 @@ services:
       start_period: 30s
     networks:
       - satvikscan-network
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
-  # Background Worker
   worker:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: satvikscan-worker
     restart: unless-stopped
     command: ["bun", "run", "start:worker"]
     environment:
@@ -83,14 +66,6 @@ services:
         condition: service_healthy
     networks:
       - satvikscan-network
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '1.0'
-        reservations:
-          memory: 512M
-          cpus: '0.5'
 
 volumes:
   redis_data:
